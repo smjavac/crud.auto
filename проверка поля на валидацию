@@ -1,0 +1,64 @@
+import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.data.Binder;
+import com.vaadin.data.ValidationResult;
+import com.vaadin.data.Validator;
+import com.vaadin.data.ValueContext;
+import com.vaadin.data.converter.StringToIntegerConverter;
+import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinServlet;
+import com.vaadin.ui.*;
+
+import javax.servlet.annotation.WebServlet;
+
+
+/**
+ * This UI is the application entry point. A UI may either represent a browser window
+ * (or tab) or some part of a html page where a Vaadin application is embedded.
+ * <p>
+ * The UI is initialized using {@link #init(VaadinRequest)}. This method is intended to be
+ * overridden to add component to the user interface and initialize non-component functionality.
+ */
+@Theme ( "mytheme" )
+public class MyUI extends UI {
+
+    @Override
+    protected void init ( final VaadinRequest vaadinRequest ) {
+
+        final TextField tf = new TextField ( "Enter year of birth:" );
+
+        Validator<String> beforeConversion = new Validator < String > ( ) {
+            @Override
+            public ValidationResult apply ( String s, ValueContext valueContext ) {
+               if(s.length ()!= 4) {
+                   return  ValidationResult.error ( "Year must consist of 4 digits" );
+               } else {
+                   return  ValidationResult.ok () ;
+               }
+            }
+        } ;
+
+        Validator<Integer> afterConversion = Validator.from ( value -> value.equals ( 2017 ), "Wrong year." );
+
+        new Binder < Person > ( )
+                .forField ( tf )
+                .withValidator ( beforeConversion )
+                .withConverter ( new StringToIntegerConverter ( "Input must be Integer" ) )
+                .withValidator ( afterConversion )
+                .bind ( Person:: getYearOfBirth, Person:: setYearOfBirth );
+
+        Button button = new Button ( "Tell me" );
+        button.addClickListener ( event -> Notification.show("This is the caption", "This is the description", Notification.Type.HUMANIZED_MESSAGE) );
+
+        setContent ( new VerticalLayout ( tf  , button ) );
+    }
+
+    @WebServlet ( urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true )
+    @VaadinServletConfiguration ( ui = MyUI.class, productionMode = false )
+    public static class MyUIServlet extends VaadinServlet {
+    }
+}
+
+/* 
+http://qaru.site/questions/723316/how-to-add-validators-in-vaadin-8
+*/
