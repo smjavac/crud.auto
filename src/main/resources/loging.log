@@ -1,0 +1,7 @@
+2019-02-15 14:30:40 DEBUG [http-nio-8080-exec-6]: SELECT * FROM auto
+2019-02-15 14:30:58 DEBUG [http-nio-8080-exec-5]: INSERT into  auto ( model, body) VALUES ('opel',  'vectra')
+2019-02-15 14:30:58 DEBUG [http-nio-8080-exec-5]: SELECT * FROM auto
+2019-02-15 14:31:06 DEBUG [http-nio-8080-exec-9]: UPDATE auto SET model= 'opel', body= 'astra' where id='7'
+2019-02-15 14:31:06 DEBUG [http-nio-8080-exec-9]: SELECT * FROM auto
+2019-02-15 14:31:07 DEBUG [http-nio-8080-exec-2]: DELETE from auto where id='7'
+2019-02-15 14:31:07 DEBUG [http-nio-8080-exec-2]: SELECT * FROM auto
